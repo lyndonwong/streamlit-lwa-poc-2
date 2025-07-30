@@ -1,4 +1,5 @@
-# LWA POC v1 2025-07-28
+# LWA POC 2 2025-07-30
+# Pursues code changes to connect my streamlit LWA POC app to real local planning commission data.
 
 import streamlit as st
 import pandas as pd
