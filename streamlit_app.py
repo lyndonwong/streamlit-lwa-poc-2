@@ -8,9 +8,14 @@ from streamlit_folium import st_folium
 
 st.set_page_config(layout="wide")
 
-st.title("Interactive Map of Menlo Park, CA")
+st.title("Tracker: San Carlos, CA Planning Commission")
+st.write("2025-07-30 prototype wip")
+
+st.markdown('''
+            This page summarizes San Carlos CA Planning Commission meetings from January through June 2025. Key discussions during this 6 month period include the **2045 General Plan Reset**, a comprehensive update addressing housing projections, land use designations, and environmental impacts like air quality and transportation. The **Pulgus Creek Watershed Plan** is also presented, outlining strategies for flood protection, sea level rise, groundwater management, and community education on watershed preservation. Additionally, the **Northeast Area Specific Plan** is explored, detailing a 20-year framework for guiding development, improving connectivity, addressing environmental resilience, and managing parking within a 145-acre district. Finally, the **Downtown Streetscape Master Plan** and **Transportation Demand Management Plan** are presented, aiming to enhance the pedestrian experience, balance transportation modes, and implement sustainable parking strategies, alongside a discussion of objective design standards for new multi-family and mixed-use developments and the **Alexandria Life Science Research and Development Campus** project.
+     
+            ''')
 st.write("Hover over the pins to see detailed information and a link for more information about each location.")
-st.write("Get August to give me critique for this map!")
 
 # Sample data for locations within Menlo Park, including a URL for more info
 data = {
