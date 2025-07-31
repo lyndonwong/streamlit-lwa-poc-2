@@ -101,14 +101,15 @@ for idx, row in df.iterrows():
 
 
     # Construct the tooltip text with detailed information and the URL link
+    # [DEPRECATED] <b>Description:</b> {project_description}<br>
+    # [DEPRECATED] {url_link}
     tooltip_html = f"""
     <h4>{project_name}</h4>
     <b>Address:</b> {street_address}<br>
-    <b>Description:</b> {project_description}<br>
     <b>Earliest Mention:</b> {formatted_earliest_date}<br>
     <b>Latest Mention:</b> {formatted_latest_date}<br>
-    <b>Coordinates:</b> ({row['latitude']:.4f}, {row['longitude']:.4f})
-    {url_link}
+    <b>Coordinates:</b> ({row['latitude']:.4f}, {row['longitude']:.4f})<br>
+    <p><small>Click for more info</small</p>
     """
 
     # Construct the popup text (appears on click)
