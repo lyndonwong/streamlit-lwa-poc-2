@@ -35,12 +35,12 @@ st.title("Map of Key Projects")
 st.write("Hover over the pins to see detailed project information. Click on a pin for a popup and to see the project name below.")
 
 # Load the data from the uploaded CSV file
-# Ensure the CSV file 'SCPT_projects_list_1H2025_v5_scrubbed_for_map - SCPT_projects_list_1H2025_v5.csv' is available in the environment.
+# Ensure the CSV file 'SCPT_projects_list_1H2025_v6_scrubbed_for_map - SCPT_projects_list_1H2025_v6.csv' is available in the environment.
 try:
     # Using the exact filename provided by the user
-    df = pd.read_csv("SCPT_projects_list_1H2025_v5_scrubbed_for_map - SCPT_projects_list_1H2025_v5.csv")
+    df = pd.read_csv("SCPT_projects_list_1H2025_v6_scrubbed_for_map - SCPT_projects_list_1H2025_v6.csv")
 except FileNotFoundError:
-    st.error("Error: The CSV file 'SCPT_projects_list_1H2025_v5_scrubbed_for_map - SCPT_projects_list_1H2025_v5.csv' was not found.")
+    st.error("Error: The CSV file 'SCPT_projects_list_1H2025_v6_scrubbed_for_map - SCPT_projects_list_1H2025_v6.csv' was not found.")
     st.stop()
 
 # --- Data Preprocessing and Handling Missing Values ---
