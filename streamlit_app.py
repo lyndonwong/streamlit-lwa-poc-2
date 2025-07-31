@@ -16,6 +16,7 @@ st.markdown('''
      
             ''')
 # Add interactive map of projects presented to the Planning Commmission
+# this code generated 7/30/2025 by Gemini in response to prompting
 
 st.title("Interactive Map of San Carlos Projects")
 st.write("Hover over the pins to see detailed project information. Click on a pin for a popup and to see the project name below.")
