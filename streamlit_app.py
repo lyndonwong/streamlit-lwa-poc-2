@@ -155,3 +155,6 @@ st.markdown("""
 - If a Public URL or Date information is missing or 'N/A', the relevant field will indicate that.
 """)
 
+st.subheader("Table of Key Projects")
+st.dataframe(df)
+
