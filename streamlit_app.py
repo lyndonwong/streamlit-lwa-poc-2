@@ -12,13 +12,13 @@ st.title("Tracker: San Carlos, CA Planning Commission")
 st.write("2025-07-30 prototype wip")
 
 st.markdown('''
-            This page summarizes San Carlos CA Planning Commission meetings from January through June 2025. Key discussions during this 6 month period include the **2045 General Plan Reset**, a comprehensive update addressing housing projections, land use designations, and environmental impacts like air quality and transportation. The **Pulgus Creek Watershed Plan** is also presented, outlining strategies for flood protection, sea level rise, groundwater management, and community education on watershed preservation. Additionally, the **Northeast Area Specific Plan** is explored, detailing a 20-year framework for guiding development, improving connectivity, addressing environmental resilience, and managing parking within a 145-acre district. Finally, the **Downtown Streetscape Master Plan** and **Transportation Demand Management Plan** are presented, aiming to enhance the pedestrian experience, balance transportation modes, and implement sustainable parking strategies, alongside a discussion of objective design standards for new multi-family and mixed-use developments and the **Alexandria Life Science Research and Development Campus** project.
-     
+            ##### Overview of Commission meetings 1H 2025: 
+            Key discussions during this 6 month period from January through June include the **2045 General Plan Reset**, a comprehensive update addressing housing projections, land use designations, and environmental impacts like air quality and transportation. The **Pulgus Creek Watershed Plan** is also presented, outlining strategies for flood protection, sea level rise, groundwater management, and community education on watershed preservation. Additionally, the **Northeast Area Specific Plan** is explored, detailing a 20-year framework for guiding development, improving connectivity, addressing environmental resilience, and managing parking within a 145-acre district. Finally, the **Downtown Streetscape Master Plan** and **Transportation Demand Management Plan** are presented, aiming to enhance the pedestrian experience, balance transportation modes, and implement sustainable parking strategies, alongside a discussion of objective design standards for new multi-family and mixed-use developments and the **Alexandria Life Science Research and Development Campus** project.     
             ''')
 # Add interactive map of projects presented to the Planning Commmission
 # this code generated 7/30/2025 by Gemini in response to prompting
 
-st.title("Interactive Map of San Carlos Projects")
+st.title("Map of Key Projects")
 st.write("Hover over the pins to see detailed project information. Click on a pin for a popup and to see the project name below.")
 
 # Load the data from the uploaded CSV file
