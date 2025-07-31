@@ -5,11 +5,24 @@ import streamlit as st
 import pandas as pd
 import folium
 from streamlit_folium import st_folium
+# add audio stream support
+import io
+
 
 st.set_page_config(layout="wide")
 
 st.title("Tracker: San Carlos, CA Planning Commission")
 st.write("2025-07-30 prototype wip")
+
+# Podcast player
+st.title("Val & Gus on the latest San Carlos Planning Activity")
+st.write("Stream the podcast now!")
+try:
+    with open("SCPT_podcast_1H2025.m4a", "rb") as audio_file:
+        audio_bytes = audio_file.read()
+    st.audio(audio_bytes, format="audio/m4a")
+except FileNotFoundError:
+    st.error("Error: The audio file 'SCPT_podcast_1H2025.m4a' was not found. Please ensure the file is in the correct directory.")  
 
 st.markdown('''
             ##### Overview of Commission meetings 1H 2025: 
