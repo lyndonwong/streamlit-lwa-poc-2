@@ -174,3 +174,15 @@ st.markdown("""
 st.subheader("Table of Key Projects")
 st.dataframe(df)
 
+# Markdown content for the Planning Commission milestones
+
+def read_markdown_file(file_path):
+    """Reads the content of a markdown file."""
+    with open(file_path, "r", encoding="utf-8") as file:
+        return file.read()
+
+markdown_content = read_markdown_file("SCPT_1H2025_Milestones.md")
+
+# Display the markdown content in Streamlit
+st.markdown(markdown_content)
+
