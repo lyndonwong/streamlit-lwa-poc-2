@@ -122,7 +122,7 @@ for idx, row in df.iterrows():
     <b>Earliest Mention:</b> {formatted_earliest_date}<br>
     <b>Latest Mention:</b> {formatted_latest_date}<br>
     <b>Coordinates:</b> ({row['latitude']:.4f}, {row['longitude']:.4f})<br>
-    <p><small>Click for more info</small</p>
+    <p><small>Click for more info</small></p>
     """
 
     # Construct the popup text (appears on click)
