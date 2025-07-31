@@ -143,7 +143,10 @@ for idx, row in df.iterrows():
     ).add_to(m)
 
 # Display the map in Streamlit
-st_data = st_folium(m, width=900, height=600)
+# Add st.container and key to st_folium to control rendering
+
+with st.container():
+    st_data = st_folium(m, width=900, height=600, key="san_carlos_map")
 
 st.subheader("Selected Project (on click):")
 if st_data and st_data.get("last_object_clicked_popup"):
