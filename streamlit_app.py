@@ -15,91 +15,141 @@ st.markdown('''
             This page summarizes San Carlos CA Planning Commission meetings from January through June 2025. Key discussions during this 6 month period include the **2045 General Plan Reset**, a comprehensive update addressing housing projections, land use designations, and environmental impacts like air quality and transportation. The **Pulgus Creek Watershed Plan** is also presented, outlining strategies for flood protection, sea level rise, groundwater management, and community education on watershed preservation. Additionally, the **Northeast Area Specific Plan** is explored, detailing a 20-year framework for guiding development, improving connectivity, addressing environmental resilience, and managing parking within a 145-acre district. Finally, the **Downtown Streetscape Master Plan** and **Transportation Demand Management Plan** are presented, aiming to enhance the pedestrian experience, balance transportation modes, and implement sustainable parking strategies, alongside a discussion of objective design standards for new multi-family and mixed-use developments and the **Alexandria Life Science Research and Development Campus** project.
      
             ''')
-st.write("Hover over the pins to see detailed information and a link for more information about each location.")
+# Add interactive map of projects presented to the Planning Commmission
 
-# Sample data for locations within Menlo Park, including a URL for more info
-data = {
-    'name': [
-        'Meta HQ (Facebook)',
-        'Menlo Park Library',
-        'Sharon Heights Golf & Country Club',
-        'Allied Arts Guild',
-        'Draper University'
-    ],
-    'latitude': [
-        37.4845,
-        37.4526,
-        37.4338,
-        37.4475,
-        37.4507
-    ],
-    'longitude': [
-        -122.1477,
-        -122.1837,
-        -122.2152,
-        -122.1932,
-        -122.1818
-    ],
-    'description': [
-        'The headquarters of Meta Platforms (formerly Facebook).',
-        'A public library serving the community of Menlo Park.',
-        'A private golf and country club offering various amenities.',
-        'A historic complex of artisan shops, gardens, and a restaurant.',
-        'An educational institution founded by venture capitalist Tim Draper.'
-    ],
-    'country': [
-        'USA', 'USA', 'USA', 'USA', 'USA'
-    ],
-    'url': [
-        'https://about.meta.com/',
-        'https://www.menlopark.org/library',
-        'https://www.sharonheights.org/',
-        'https://alliedartsguild.org/',
-        'https://www.draperuniversity.com/'
-    ]
-}
-df = pd.DataFrame(data)
+st.title("Interactive Map of San Carlos Projects")
+st.write("Hover over the pins to see detailed project information. Click on a pin for a popup and to see the project name below.")
 
-# Center the map specifically around Menlo Park, CA
-# Approximate center of Menlo Park
-map_center = [37.45, -122.18]
+# Load the data from the uploaded CSV file
+# Ensure the CSV file 'SCPT_projects_list_1H2025_v5_scrubbed_for_map - SCPT_projects_list_1H2025_v5.csv' is available in the environment.
+try:
+    # Using the exact filename provided by the user
+    df = pd.read_csv("SCPT_projects_list_1H2025_v5_scrubbed_for_map - SCPT_projects_list_1H2025_v5.csv")
+except FileNotFoundError:
+    st.error("Error: The CSV file 'SCPT_projects_list_1H2025_v5_scrubbed_for_map - SCPT_projects_list_1H2025_v5.csv' was not found.")
+    st.stop()
+
+# --- Data Preprocessing and Handling Missing Values ---
+
+# Rename columns for easier access (optional, but good practice)
+df.rename(columns={
+    'Project Name': 'name',
+    'Latitude': 'latitude',
+    'Longitude': 'longitude',
+    'Street Address': 'address',
+    'City': 'city',
+    'Project Description': 'description',
+    'Public URL': 'url',
+    'Date of Earliest Mention': 'earliest_mention_date', # Renamed
+    'Date of Latest Mention': 'latest_mention_date'    # Renamed
+}, inplace=True)
+
+# Convert latitude and longitude to numeric, coercing errors to NaN
+df['latitude'] = pd.to_numeric(df['latitude'], errors='coerce')
+df['longitude'] = pd.to_numeric(df['longitude'], errors='coerce')
+
+# Filter out rows where latitude or longitude are missing, as these cannot be plotted
+initial_rows = len(df)
+df.dropna(subset=['latitude', 'longitude'], inplace=True)
+if len(df) < initial_rows:
+    st.warning(f"Removed {initial_rows - len(df)} rows due to missing Latitude or Longitude data.")
+
+# Further filter to ensure only San Carlos projects are shown (if 'City' column exists and is needed)
+if 'city' in df.columns:
+    df = df[df['city'].astype(str).str.contains('San Carlos', case=False, na=False)]
+    if df.empty:
+        st.warning("No projects found for San Carlos after filtering.")
+        st.stop()
+else:
+    st.warning("The 'City' column was not found in the CSV. Displaying all projects with valid coordinates.")
+
+
+# Center the map around San Carlos, CA
+# Using the mean of the available San Carlos coordinates for a more accurate center
+if not df.empty:
+    map_center = [df['latitude'].mean(), df['longitude'].mean()]
+else:
+    # Fallback to a default San Carlos center if no valid data points
+    map_center = [37.5025, -122.2605] # Approximate center of San Carlos
 
 # Create a Folium map object
-# Increased zoom_start for a closer view of Menlo Park
-m = folium.Map(location=map_center, zoom_start=12, control_scale=True)
+m = folium.Map(location=map_center, zoom_start=13, control_scale=True)
 
 # Add markers for each location
 for idx, row in df.iterrows():
+    project_name = row.get('name', 'N/A')
+    project_description = row.get('description', 'No description available.')
+    street_address = row.get('address', 'N/A')
+    public_url = row.get('url')
+    earliest_date = row.get('earliest_mention_date', 'N/A') # Get earliest date
+    latest_date = row.get('latest_mention_date', 'N/A')   # Get latest date
+
+    # Handle missing URL gracefully
+    url_link = ""
+    if pd.notna(public_url) and public_url.strip() != '' and public_url.strip().lower() != 'n/a':
+        # Ensure URL starts with http:// or https:// for proper linking
+        if not public_url.startswith(('http://', 'https://')):
+            public_url = 'https://' + public_url # Prepend https if missing
+        url_link = f"<br><a href='{public_url}' target='_blank'>More Information</a>"
+    else:
+        url_link = "<br>No public URL available."
+
+    # Format dates for display, handling potential NaN or 'N/A'
+    formatted_earliest_date = str(earliest_date) if pd.notna(earliest_date) and str(earliest_date).strip().lower() != 'n/a' else 'N/A'
+    formatted_latest_date = str(latest_date) if pd.notna(latest_date) and str(latest_date).strip().lower() != 'n/a' else 'N/A'
+
+
     # Construct the tooltip text with detailed information and the URL link
     tooltip_html = f"""
-    <h4>{row['name']}</h4>
-    <b>Description:</b> {row['description']}<br>
-    <b>Coordinates:</b> ({row['latitude']:.4f}, {row['longitude']:.4f})<br>
-    <a href="{row['url']}" target="_blank">More Information</a>
+    <h4>{project_name}</h4>
+    <b>Address:</b> {street_address}<br>
+    <b>Description:</b> {project_description}<br>
+    <b>Earliest Mention:</b> {formatted_earliest_date}<br>
+    <b>Latest Mention:</b> {formatted_latest_date}<br>
+    <b>Coordinates:</b> ({row['latitude']:.4f}, {row['longitude']:.4f})
+    {url_link}
     """
 
-    # Add a marker with the tooltip
+    # Construct the popup text (appears on click)
+    popup_html = f"""
+    <b>{project_name}</b><br>
+    {project_description}<br>
+    <b>Earliest Mention:</b> {formatted_earliest_date}<br>
+    <b>Latest Mention:</b> {formatted_latest_date}<br>
+    {url_link.replace('<br>', '')}
+    """
+
+    # Add a marker with the tooltip and popup
     folium.Marker(
         location=[row['latitude'], row['longitude']],
-        tooltip=folium.Tooltip(tooltip_html, sticky=True, max_width=300), # 'sticky=True' makes it follow the mouse
-        popup=folium.Popup(f"<b>{row['name']}</b><br>{row['description']}<br><a href='{row['url']}' target='_blank'>Visit Website</a>"), # Optional: popup on click
-        icon=folium.Icon(color='blue', icon='map-marker') # Changed icon color and type for variety
+        tooltip=folium.Tooltip(tooltip_html, sticky=True, max_width=400),
+        popup=folium.Popup(popup_html, max_width=300),
+        icon=folium.Icon(color='green', icon='info-sign') # Changed icon color and type for San Carlos projects
     ).add_to(m)
 
 # Display the map in Streamlit
-# Adjusted width for better viewing of a localized area
 st_data = st_folium(m, width=900, height=600)
 
-st.subheader("Selected Location (on click):")
+st.subheader("Selected Project (on click):")
 if st_data and st_data.get("last_object_clicked_popup"):
-    st.info(f"You clicked on: {st_data['last_object_clicked_popup']}")
+    # Extract the project name from the popup HTML for display
+    clicked_popup_content = st_data['last_object_clicked_popup']
+    # A simple way to get the bolded project name from the popup HTML
+    import re
+    match = re.search(r'<b>(.*?)</b>', clicked_popup_content)
+    if match:
+        st.info(f"You clicked on: {match.group(1)}")
+    else:
+        st.info(f"You clicked on: {clicked_popup_content.split('<br>')[0]}")
 else:
-    st.write("Click on a marker to see its details here.")
+    st.write("Click on a marker to see its project name here.")
 
 st.markdown("""
 ---
 **Note:**
-- **Hover** over a pin to see its `tooltip` (rich information, including a link).
-- **Click** on a pin to see its `popup` and update the "Selected Location" text below the map.
-- The `streamlit-folium` component provides a lot more customization options than `st.map()`.
+- **Hover** over a pin to see its `tooltip` (rich information, including a link to more details).
+- **Click** on a pin to see its `popup` and update the "Selected Project" text below the map.
+- Rows with missing Latitude or Longitude values are automatically excluded from the map.
+- If a Public URL or Date information is missing or 'N/A', the relevant field will indicate that.
 """)
+
