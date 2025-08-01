@@ -199,5 +199,6 @@ def read_markdown_file(file_path):
 markdown_content = read_markdown_file("SCPT_1H2025_Milestones.md")
 
 # Display the markdown content in Streamlit
-st.markdown(markdown_content)
+if st.checkbox("Show Planning Commission 1H 2025 Activity Details"):
+    st.markdown(markdown_content)
 
