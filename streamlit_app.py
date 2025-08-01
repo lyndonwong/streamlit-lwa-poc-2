@@ -183,7 +183,7 @@ st.dataframe(df)
 
 # Planning Commission detailed activity highlights
 st.subheader("Deep Dive")
-st.write("Click the checkbox to dig in to specifics.")       
+st.write("Click the checkbox to dig deeper.")       
 # Get markdown content for the Planning Commission highlights
 def read_markdown_file(file_path):
     """Reads the content of a markdown file."""
