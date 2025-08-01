@@ -12,17 +12,19 @@ st.set_page_config(layout="wide")
 
 # --- CSS Injection to target map_div2 ---
 # This CSS attempts to hide the problematic map_div2 element
-st.markdown("""
-    <style>
-    /* Target the specific ID that appeared in the browser's dev tools */
-    #map_div2 {
-        display: none !important; /* Hides the element completely */
-        height: 0px !important;   /* Ensures no height is taken up */
-        margin: 0px !important;   /* Removes any potential margin */
-        padding: 0px !important;  /* Removes any potential padding */
-    }
-    </style>
-    """, unsafe_allow_html=True)
+# st.markdown("""
+#     <style>
+#     /* Target the specific ID that appeared in the browser's dev tools */
+#     #map_div2 {
+#         display: none !important; /* Hides the element completely */
+#         height: 0px !important;   /* Ensures no height is taken up */
+#         margin: 0px !important;   /* Removes any potential margin */
+#         padding: 0px !important;  /* Removes any potential padding */
+#     }
+#     </style>
+#     """, unsafe_allow_html=True)
+#
+# DEPRECATED above code because it did not successfully remove the empty space
 # --- End CSS Injection ---
 
 
@@ -159,6 +161,19 @@ for idx, row in df.iterrows():
 
 # Display the map in Streamlit
 # Add st.container and key to st_folium to control rendering
+# --- CSS WORKAROUND ---
+# Inject custom CSS to remove bottom margin of the map
+st.markdown(
+    """
+    <style>
+    iframe {
+        margin-bottom: 0 !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+# --- END CSS WORKAROUND ---
 
 with st.container():
     st_data = st_folium(m, width=900, height=600, key="san_carlos_map")
