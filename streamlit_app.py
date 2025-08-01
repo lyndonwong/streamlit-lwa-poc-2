@@ -7,33 +7,16 @@ import folium
 from streamlit_folium import st_folium
 # add audio stream support
 import io
+# Bypass streamlit_folium component, which has bug that causes empty space at bottom of map
+import streamlit.components.v1 as components
 
 st.set_page_config(layout="wide")
 
-# --- CSS Injection to target map_div2 ---
-# This CSS attempts to hide the problematic map_div2 element
-# st.markdown("""
-#     <style>
-#     /* Target the specific ID that appeared in the browser's dev tools */
-#     #map_div2 {
-#         display: none !important; /* Hides the element completely */
-#         height: 0px !important;   /* Ensures no height is taken up */
-#         margin: 0px !important;   /* Removes any potential margin */
-#         padding: 0px !important;  /* Removes any potential padding */
-#     }
-#     </style>
-#     """, unsafe_allow_html=True)
-#
-# DEPRECATED above code because it did not successfully remove the empty space
-# --- End CSS Injection ---
-
-
 st.title("Tracker: San Carlos Planning Commission")
-st.write("2025-07-30 prototype wip")
 
 # Podcast player
-st.subheader("Val & Gus Town Talk - July 2025 Podcast")
-st.write("Stream it now!")
+st.subheader("Town Talk - July 2025 Podcast")
+st.write("Your 5 minute talk show on the big themes and impacts of San Carlos planning commission actions in 1H 2025")
 try:
     with open("SCPT_podcast_1H2025.m4a", "rb") as audio_file:
         audio_bytes = audio_file.read()
@@ -46,7 +29,6 @@ st.markdown('''
             Key discussions during this 6 month period from January through June include the **2045 General Plan Reset**, a comprehensive update addressing housing projections, land use designations, and environmental impacts like air quality and transportation. The **Pulgus Creek Watershed Plan** is also presented, outlining strategies for flood protection, sea level rise, groundwater management, and community education on watershed preservation. Additionally, the **Northeast Area Specific Plan** is explored, detailing a 20-year framework for guiding development, improving connectivity, addressing environmental resilience, and managing parking within a 145-acre district. Finally, the **Downtown Streetscape Master Plan** and **Transportation Demand Management Plan** are presented, aiming to enhance the pedestrian experience, balance transportation modes, and implement sustainable parking strategies, alongside a discussion of objective design standards for new multi-family and mixed-use developments and the **Alexandria Life Science Research and Development Campus** project.     
             ''')
 # Add interactive map of projects presented to the Planning Commmission
-# this code generated 7/30/2025 by Gemini in response to prompting
 
 st.subheader("Key Projects Map")
 st.write("Hover over the pins to see detailed project information. Click on a pin for a popup and to see the project name below.")
@@ -94,7 +76,6 @@ if 'city' in df.columns:
 else:
     st.warning("The 'City' column was not found in the CSV. Displaying all projects with valid coordinates.")
 
-
 # Center the map around San Carlos, CA
 # Using the mean of the available San Carlos coordinates for a more accurate center
 if not df.empty:
@@ -104,7 +85,8 @@ else:
     map_center = [37.5025, -122.2605] # Approximate center of San Carlos
 
 # Create a Folium map object
-m = folium.Map(location=map_center, zoom_start=13, control_scale=True)
+map_height = 500  # Set the height of the map
+m = folium.Map(location=map_center, zoom_start=13, height=map_height, control_scale=True)
 
 # Add markers for each location
 for idx, row in df.iterrows():
@@ -128,7 +110,6 @@ for idx, row in df.iterrows():
     # Format dates for display, handling potential NaN or 'N/A'
     formatted_earliest_date = str(earliest_date) if pd.notna(earliest_date) and str(earliest_date).strip().lower() != 'n/a' else 'N/A'
     formatted_latest_date = str(latest_date) if pd.notna(latest_date) and str(latest_date).strip().lower() != 'n/a' else 'N/A'
-
 
     # Construct the tooltip text with detailed information and the URL link
     # [DEPRECATED] <b>Description:</b> {project_description}<br>
@@ -161,42 +142,38 @@ for idx, row in df.iterrows():
 
 # Display the map in Streamlit
 # Add st.container and key to st_folium to control rendering
-# --- CSS WORKAROUND ---
-# Inject custom CSS to remove bottom margin of the map
-st.markdown(
-    """
-    <style>
-    iframe {
-        margin-bottom: 0 !important;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-# --- END CSS WORKAROUND ---
+# --- DEPRECATED 8/1/2025 to eliminate empty space bug ---
+# with st.container():
+#     st_data = st_folium(m, width=900, height=600, key="san_carlos_map")
 
-with st.container():
-    st_data = st_folium(m, width=900, height=600, key="san_carlos_map")
+# --- DEPRECATED 8/1/2025 to simplify functionality of app ---
+# st.subheader("Selected Project (on click):")
+# if st_data and st_data.get("last_object_clicked_popup"):
+#     # Extract the project name from the popup HTML for display
+#     clicked_popup_content = st_data['last_object_clicked_popup']
+#     # A simple way to get the bolded project name from the popup HTML
+#     import re
+#     match = re.search(r'<b>(.*?)</b>', clicked_popup_content)
+#     if match:
+#         st.info(f"You clicked on: {match.group(1)}")
+#     else:
+#         st.info(f"You clicked on: {clicked_popup_content.split('<br>')[0]}")
+# else:
+#     st.write("Click on a marker to see its project name here.")
 
-st.subheader("Selected Project (on click):")
-if st_data and st_data.get("last_object_clicked_popup"):
-    # Extract the project name from the popup HTML for display
-    clicked_popup_content = st_data['last_object_clicked_popup']
-    # A simple way to get the bolded project name from the popup HTML
-    import re
-    match = re.search(r'<b>(.*?)</b>', clicked_popup_content)
-    if match:
-        st.info(f"You clicked on: {match.group(1)}")
-    else:
-        st.info(f"You clicked on: {clicked_popup_content.split('<br>')[0]}")
-else:
-    st.write("Click on a marker to see its project name here.")
+# --- RENDER MAP USING st.components.v1.html ---
+# This is a workaround to avoid the empty space issue at the bottom of the map
+# Get raw HTML from the Folium map
+map_html = m._repr_html_()
+# Render the map HTML with st.components.v1.html
+components.html(map_html, height=map_height + 2)
 
+# Instructions to use interactive map
 st.markdown("""
 ---
-**Note:**
-- **Hover** over a pin to see its `tooltip` (rich information, including a link to more details).
-- **Click** on a pin to see its `popup` and update the "Selected Project" text below the map.
+#### Map Usage Note: 
+- **Hover** over a pin to see its `tooltip` information.
+- **Click** on a pin to see `popup' with more details, including a public URL link when available.
 - Rows with missing Latitude or Longitude values are automatically excluded from the map.
 - If a Public URL or Date information is missing or 'N/A', the relevant field will indicate that.
 """)
@@ -204,7 +181,7 @@ st.markdown("""
 st.subheader("Table of Key Projects")
 st.dataframe(df)
 
-# Markdown content for the Planning Commission milestones
+# Get markdown content for the Planning Commission highlights
 
 def read_markdown_file(file_path):
     """Reads the content of a markdown file."""
@@ -213,7 +190,7 @@ def read_markdown_file(file_path):
 
 markdown_content = read_markdown_file("SCPT_1H2025_Milestones.md")
 
-# Display the markdown content in Streamlit
+# Display the markdown content in Streamlit, with user control to show/hide
 if st.checkbox("Show Planning Commission 1H 2025 Activity Details"):
     st.markdown(markdown_content)
 
