@@ -8,8 +8,23 @@ from streamlit_folium import st_folium
 # add audio stream support
 import io
 
-
 st.set_page_config(layout="wide")
+
+# --- CSS Injection to target map_div2 ---
+# This CSS attempts to hide the problematic map_div2 element
+st.markdown("""
+    <style>
+    /* Target the specific ID that appeared in the browser's dev tools */
+    #map_div2 {
+        display: none !important; /* Hides the element completely */
+        height: 0px !important;   /* Ensures no height is taken up */
+        margin: 0px !important;   /* Removes any potential margin */
+        padding: 0px !important;  /* Removes any potential padding */
+    }
+    </style>
+    """, unsafe_allow_html=True)
+# --- End CSS Injection ---
+
 
 st.title("Tracker: San Carlos, CA Planning Commission")
 st.write("2025-07-30 prototype wip")
