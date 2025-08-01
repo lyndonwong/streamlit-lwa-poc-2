@@ -26,12 +26,12 @@ st.markdown("""
 # --- End CSS Injection ---
 
 
-st.title("Tracker: San Carlos, CA Planning Commission")
+st.title("Tracker: San Carlos Planning Commission")
 st.write("2025-07-30 prototype wip")
 
 # Podcast player
-st.title("Val & Gus on the latest San Carlos Planning Activity")
-st.write("Stream the podcast now!")
+st.subheader("Val & Gus Town Talk - July 2025 Podcast")
+st.write("Stream it now!")
 try:
     with open("SCPT_podcast_1H2025.m4a", "rb") as audio_file:
         audio_bytes = audio_file.read()
@@ -46,7 +46,7 @@ st.markdown('''
 # Add interactive map of projects presented to the Planning Commmission
 # this code generated 7/30/2025 by Gemini in response to prompting
 
-st.title("Map of Key Projects")
+st.subheader("Key Projects Map")
 st.write("Hover over the pins to see detailed project information. Click on a pin for a popup and to see the project name below.")
 
 # Load the data from the uploaded CSV file
