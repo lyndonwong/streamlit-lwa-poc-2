@@ -11,12 +11,13 @@ import io
 import streamlit.components.v1 as components
 
 st.set_page_config(layout="wide")
-
+st.logo("LWA-v2-square.png", size="large")    
+st.image("LWA-demo-lab-bar.png", use_container_width=True )
 st.title("Your Tracker: San Carlos Planning Commission")
 
 # Podcast player
-st.subheader("Town Talk - July 2025 Podcast")
-st.write("Your 5 minute talk show on the big themes and impacts of San Carlos planning commission actions in 1H 2025")
+st.subheader("Deep Dive - July 2025 Podcast")
+st.write("Your 5 minute podcast on the big themes and impacts of San Carlos planning commission actions in 1H 2025")
 try:
     with open("SCPT_podcast_1H2025.m4a", "rb") as audio_file:
         audio_bytes = audio_file.read()
@@ -182,7 +183,7 @@ st.subheader("Table of Key Projects")
 st.dataframe(df)
 
 # Planning Commission detailed activity highlights
-st.subheader("Deep Dive")
+st.subheader("Fine Print")
 st.write("Click the checkbox to dig deeper.")       
 # Get markdown content for the Planning Commission highlights
 def read_markdown_file(file_path):
