@@ -12,7 +12,7 @@ import streamlit.components.v1 as components
 
 st.set_page_config(layout="wide")
 
-st.title("Tracker: San Carlos Planning Commission")
+st.title("Your Tracker: San Carlos Planning Commission")
 
 # Podcast player
 st.subheader("Town Talk - July 2025 Podcast")
@@ -181,8 +181,10 @@ st.markdown("""
 st.subheader("Table of Key Projects")
 st.dataframe(df)
 
+# Planning Commission detailed activity highlights
+st.subheader("Deep Dive")
+st.write("Click the checkbox to dig in to specifics.")       
 # Get markdown content for the Planning Commission highlights
-
 def read_markdown_file(file_path):
     """Reads the content of a markdown file."""
     with open(file_path, "r", encoding="utf-8") as file:
@@ -191,6 +193,6 @@ def read_markdown_file(file_path):
 markdown_content = read_markdown_file("SCPT_1H2025_Milestones.md")
 
 # Display the markdown content in Streamlit, with user control to show/hide
-if st.checkbox("Show Planning Commission 1H 2025 Activity Details"):
+if st.checkbox("See Planning Commission 1H 2025 Activity Details"):
     st.markdown(markdown_content)
 
