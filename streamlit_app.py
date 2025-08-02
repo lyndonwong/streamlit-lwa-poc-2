@@ -174,7 +174,7 @@ st.markdown("""
 ---
 #### Map Usage Note: 
 - **Hover** over a pin to see its `tooltip` information.
-- **Click** on a pin to see `popup' with more details, including a public URL link when available.
+- **Click** on a pin to see `popup` with more details, including a public URL link when available.
 - Rows with missing Latitude or Longitude values are automatically excluded from the map.
 - If a Public URL or Date information is missing or 'N/A', the relevant field will indicate that.
 """)
