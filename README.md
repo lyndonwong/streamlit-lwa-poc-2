@@ -4,6 +4,9 @@
 
 Build a variant of my streamlit-lwa-poc-1 app that connects with real local planning commission data.
 
+WIP deployed at:
+https://lwa-poc-2.streamlit.app/
+
 ### Prior Goals
 
 1. [STILL TBD] Filter plotted project locations by traits such as "commercial project", "residential project", "mixed-use project", "estimated value < $10M", "estimated value > $10M"
