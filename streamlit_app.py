@@ -185,7 +185,9 @@ st.dataframe(df)
 # Meeting Metrics for 1H 2025
 st.subheader("Meeting Metrics for 1H 2025")
 chart_df = pd.read_csv('SCPT_meeting_metrics_1H2025.csv')
-st.bar_chart(chart_df.set_index('Meeting length in minutes'), use_container_width=True) 
+chart_df["Meeting Date"] = pd.to_datetime(chart_df["Meeting Date"])
+chart_df["Meeting length in minutes"] = pd.to_numeric(chart_df["Meeting length in minutes"], errors='coerce')
+st.bar_chart(chart_df, x="Meeting Date", y="Meeting length in minutes", use_container_width=True) 
 
 # Planning Commission detailed activity highlights
 st.subheader("Fine Print")
