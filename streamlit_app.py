@@ -185,7 +185,7 @@ st.dataframe(df)
 # Meeting Metrics for 1H 2025
 st.subheader("Meeting Metrics for 1H 2025")
 chart_df = pd.read_csv('SCPT_meeting_metrics_1H2025.csv')
-st.bar_chart(chart_df.set_index('Metric'), use_container_width=True) 
+st.bar_chart(chart_df.set_index('Meeting length in minutes'), use_container_width=True) 
 
 # Planning Commission detailed activity highlights
 st.subheader("Fine Print")
