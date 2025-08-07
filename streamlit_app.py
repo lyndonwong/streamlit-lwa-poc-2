@@ -7,8 +7,10 @@ import folium
 from streamlit_folium import st_folium
 # add audio stream support
 import io
-# Bypass streamlit_folium component, which has bug that causes empty space at bottom of map
-import streamlit.components.v1 as components
+
+# DEPRECATED 8/7/2025
+# # Bypass streamlit_folium component, which has bug that causes empty space at bottom of map
+# import streamlit.components.v1 as components
 
 st.set_page_config(layout="wide")
 st.logo("LWA-v2-square.png", size="large")    
@@ -144,8 +146,9 @@ for idx, row in df.iterrows():
 # Display the map in Streamlit
 # Add st.container and key to st_folium to control rendering
 # --- DEPRECATED 8/1/2025 to eliminate empty space bug ---
-# with st.container():
-#     st_data = st_folium(m, width=900, height=600, key="san_carlos_map")
+# --- RESTORED 8/7/2025 to use streamlit-folium 0.25.1, which appears to fix empty space bug
+with st.container():
+    st_data = st_folium(m, width=900, height=600, key="san_carlos_map")
 
 # --- DEPRECATED 8/1/2025 to simplify functionality of app ---
 # st.subheader("Selected Project (on click):")
@@ -162,12 +165,13 @@ for idx, row in df.iterrows():
 # else:
 #     st.write("Click on a marker to see its project name here.")
 
-# --- RENDER MAP USING st.components.v1.html ---
-# This is a workaround to avoid the empty space issue at the bottom of the map
-# Get raw HTML from the Folium map
-map_html = m._repr_html_()
-# Render the map HTML with st.components.v1.html
-components.html(map_html, height=map_height + 2)
+# DEPRECATED 8/7/2025
+# # --- RENDER MAP USING st.components.v1.html ---
+# # This is a workaround to avoid the empty space issue at the bottom of the map
+# # Get raw HTML from the Folium map
+# map_html = m._repr_html_()
+# # Render the map HTML with st.components.v1.html
+# components.html(map_html, height=map_height + 2)
 
 # Instructions to use interactive map
 st.markdown("""
